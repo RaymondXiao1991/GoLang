@@ -1,30 +1,22 @@
-package main  
+package main
 
-import (  
-	"fmt"  
-	"time"  
-)  
+import (
+	"fmt"
+	"time"
+)
 
 // 求两个时间之间的时间差几个月零几天
 func CalcTimeBetweenDates(startDate int64, endDate int64) (months, days int) {
-	s := time.Unix(startDate, 0)
-	e := time.Unix(endDate, 0)
-
-	m := int(endDate - startDate)/(24*60*60)/31
-	fmt.Println("m:", m)
-	d := int(endDate - (s.AddDate(0,int(m),0)).Unix())/(24*60*60)
-	fmt.Println("d:", d)
-
-	ds := DayInMonth(e)
-
-	fmt.Println("ds:", ds)
-
-	if d > ds {
-		m++
-		d = d - ds
+	start := time.Unix(startDate, 0)
+	months = int(endDate-startDate) / (24 * 60 * 60) / 31
+	later := start.AddDate(0, int(months), 0)
+	days = int(endDate-later.Unix()) / (24 * 60 * 60)
+	dayInMonth := DayInMonth(later)
+	if days >= dayInMonth {
+		months++
+		days = days - dayInMonth
 	}
-
-	return m, d
+	return months, days
 }
 
 func IsLeapYear(year int) bool {
@@ -38,7 +30,6 @@ func IsLeapYear(year int) bool {
 }
 
 func DayInMonth(t time.Time) int {
-	fmt.Println(MonthDays[t.Month()])
 	if t.Month() == 2 {
 		if IsLeapYear(t.Year()) {
 			return 29
@@ -63,3 +54,67 @@ var MonthDays = map[time.Month]int{
 	12: 31,
 }
 
+func TestCaseOfCalcTime() {
+	// 1515254400 2018-01-07 00:00:00
+	// 1517932800 2018-02-07 00:00:00
+	fmt.Println("2018-01-07 00:00:00 -- 2018-02-07 00:00:00")
+	m, d := CalcTimeBetweenDates(1515254400, 1517932800)
+	fmt.Println("m,d:", m, d)
+	fmt.Println("--------------------")
+
+	// 1485960657 2017-2-1 22:50:57
+	// 1512917457 2017-12-10 22:50:57
+	fmt.Println("2017-2-1 22:50:57 -- 2017-12-10 22:50:57")
+	m, d = CalcTimeBetweenDates(1485960657, 1512917457)
+	fmt.Println("m,d:", m, d)
+	fmt.Println("--------------------")
+
+	// 1485960657 2017-2-1 22:50:57
+	// 1514645457 2017-12-30 22:50:57
+	fmt.Println("2017-2-1 22:50:57 -- 2017-12-30 22:50:57")
+	m, d = CalcTimeBetweenDates(1485960657, 1514645457)
+	fmt.Println("m,d:", m, d)
+	fmt.Println("--------------------")
+
+	// 1449800745 2015/12/11 10:25:45
+	// 1514645457 2017-12-30 22:50:57
+	fmt.Println("2015/12/11 10:25:45 -- 2017-12-30 22:50:57")
+	m, d = CalcTimeBetweenDates(1449800745, 1514645457)
+	fmt.Println("m,d:", m, d)
+	fmt.Println("--------------------")
+
+	// 1483200000 2017/1/1 00:00:00
+	// 1488384000 2017/3/2 00:00:00
+	fmt.Println("2017/1/1 00:00:00 -- 2017/3/2 00:00:00")
+	m, d = CalcTimeBetweenDates(1483200000, 1488384000)
+	fmt.Println("m,d:", m, d)
+	fmt.Println("--------------------")
+
+	// 1485878400 2017/2/1 00:00:00
+	// 1490976000 2017/4/1 00:00:00
+	fmt.Println("2017/2/1 00:00:00 -- 2017/4/1 00:00:00")
+	m, d = CalcTimeBetweenDates(1485878400, 1490976000)
+	fmt.Println("m,d:", m, d)
+	fmt.Println("--------------------")
+
+	// 1485964800 2017/2/2 00:00:00
+	// 1490976000 2017/4/1 00:00:00
+	fmt.Println("2017/2/2 00:00:00 -- 2017/4/1 00:00:00")
+	m, d = CalcTimeBetweenDates(1485964800, 1490976000)
+	fmt.Println("m,d:", m, d)
+	fmt.Println("--------------------")
+
+	// 1072886400 2004/1/1 00:00:00
+	// 1078070400 2004/3/1 00:00:00
+	fmt.Println("2004/1/1 00:00:00 -- 2004/3/1 00:00:00")
+	m, d = CalcTimeBetweenDates(1072886400, 1078070400)
+	fmt.Println("m,d:", m, d)
+	fmt.Println("--------------------")
+
+	// 1072886400 2004/1/1 00:00:00
+	// 1077984000 2004/2/29 00:00:00
+	fmt.Println("2004/1/1 00:00:00 -- 2004/2/29 00:00:00")
+	m, d = CalcTimeBetweenDates(1072886400, 1077984000)
+	fmt.Println("m,d:", m, d)
+	fmt.Println("--------------------")
+}
