@@ -10,7 +10,7 @@ func CalcTimeBetweenDates(startDate int64, endDate int64) (months, days int) {
 	start := time.Unix(startDate, 0)
 	months = int(endDate-startDate) / (24 * 60 * 60) / 31
 	later := start.AddDate(0, int(months), 0)
-	days = int(endDate-later.Unix()) / (24 * 60 * 60)
+	days = int(endDate-later.Unix())/(24*60*60) + 1
 	dayInMonth := DayInMonth(later)
 	if days >= dayInMonth {
 		months++
