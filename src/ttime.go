@@ -117,4 +117,18 @@ func TestCaseOfCalcTime() {
 	m, d = CalcTimeBetweenDates(1072886400, 1077984000)
 	fmt.Println("m,d:", m, d)
 	fmt.Println("--------------------")
+
+	// 1513094400 2017/12/13 0:0:0
+	// 1519660800 2018/2/27 0:0:0
+	fmt.Println("2017/12/13 0:0:0 -- 2018/2/27 0:0:0")
+	m, d = CalcTimeBetweenDates(1513094400, 1519660800)
+	fmt.Println("m,d:", m, d)
+	fmt.Println("--------------------")
+
+	// 1503072000 2017/08/19 0:0:0
+	// 1514044800 2017/12/24 0:0:0
+	fmt.Println("2017/08/19 0:0:0 -- 2017/12/24 0:0:0")
+	m, d = CalcTimeBetweenDates(1503072000, 1514044800)
+	fmt.Println("m,d:", m, d)
+	fmt.Println("--------------------")
 }
