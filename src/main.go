@@ -6,7 +6,6 @@ import (
 )
 
 func main() {
-
 	// 测试时间差计算
 	TestCaseOfCalcTime()
 	fmt.Println("-------------------------------")
@@ -37,4 +36,61 @@ func main() {
 	fmt.Println("-------------------------------")
 
 	mapPriorities()
+	fmt.Println("-------------------------------")
+
+	fmt.Println(IntVector{3, 4, 5}.Sum())
+	fmt.Println("-------------------------------")
+
+	pointer()
+	fmt.Println("-------------------------------")
+
+	StartEndTime()
+	EndDateOfThisMonth()
+	fmt.Println("-------------------------------")
+
+	fmt.Println("GetEndDateOfCurrentMonth:", GetEndDateOfCurrentMonth())
+	fmt.Println("-------------------------------")
+
+	fmt.Println("GetEndDateOfCurrentMonth:", GetEndDateOfCurrentMonth2(1506182400))
+	fmt.Println("-------------------------------")
+
+	startDateOfNextMonth := GetStartDateOfNextMonth(1517414400)
+	fmt.Println("GetStartDateOfNextMonth:", startDateOfNextMonth)
+	fmt.Println("-------------------------------")
+	currentTermEndTime := AddMonthTime(time.Unix(startDateOfNextMonth.Unix(), 0), 1)
+	fmt.Println("currentTermEndTime:", currentTermEndTime)
+	fmt.Println("-------------------------------")
+
+	today := time.Unix(GetLaterDateTime(time.Now(), 0), 0)
+	fmt.Println("today:", today)
+	fmt.Println("-------------------------------")
+
+	testIf()
+	fmt.Println("-------------------------------")
+
+	TestAddMonth()
+	fmt.Println("-------------------------------")
+
+	TestDateUntil()
+	fmt.Println("-------------------------------")
+
+	TestAccuracy()
+	fmt.Println("-------------------------------")
+
+	TestCalTermEndTimeStr()
+	fmt.Println("-------------------------------")
+
+	output := new(Output)
+	output.BillCode = "xxx"
+	SortAttribute(output)
+	fmt.Println("-------------------------------")
+
+	outputdetail := new(OutputDetail)
+	outputdetail.BillCode = "xxx"
+	outputdetail.BillName = "yyy"
+	SortAttribute(outputdetail)
+	fmt.Println("-------------------------------")
+
+	TestIsNormal()
+	fmt.Println("-------------------------------")
 }
