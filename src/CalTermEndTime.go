@@ -20,7 +20,6 @@ func CalTermEndTime(startTime, endTime int64, term, totalTerm, billType, payment
 			endDateStr = endTime
 		}
 	case 2:
-		//startDateStr = time.Unix(startTime, 0).AddDate(0, paymentMonth*(term-1), 0).Unix()
 		startDateStr = AddMonthTime(time.Unix(startTime, 0), paymentMonth*(term-1)).AddDate(0, 0, 1).Unix()
 		if isTermNormal {
 			endDateStr = AddMonth(startTime, paymentMonth*term)
@@ -46,8 +45,50 @@ func CalTermEndTime(startTime, endTime int64, term, totalTerm, billType, payment
 	return
 }
 
+// CalcStartEndTimeOfIrrTerm 计算租期起始时间(不规则账期)
+func CalcStartEndTimeOfIrrTerm(startTime, endTime int64, term, totalTerm, billType, paymentMonth int, isTermNormal bool) (termStartTime, termEndTime int64) {
+	endDateOfStartTime := GetStartDateOfNextMonth(startTime).Unix()
+	switch billType {
+	case 1:
+		termStartTime = startTime
+		if isTermNormal {
+			termEndTime = AddMonth(endDateOfStartTime, paymentMonth)
+		} else {
+			termEndTime = endTime
+		}
+	case 2:
+		termStartTime = AddMonthTime(time.Unix(endDateOfStartTime, 0), paymentMonth*(term-1)).AddDate(0, 0, 1).Unix()
+		if isTermNormal {
+			termEndTime = AddMonth(endDateOfStartTime, paymentMonth*term)
+		} else {
+			termEndTime = endTime
+		}
+	case 3:
+		if isTermNormal {
+			termStartTime = AddMonth(endDateOfStartTime, paymentMonth*(totalTerm-1))
+			termEndTime = AddMonth(endDateOfStartTime, paymentMonth*(totalTerm))
+		} else {
+			termStartTime = CurrentTimeStamp()
+			termEndTime = CurrentTimeStamp()
+		}
+	case 4:
+		termStartTime = CurrentTimeStamp()
+		termEndTime = CurrentTimeStamp()
+	case 5:
+		termStartTime = CurrentTimeStamp()
+		termEndTime = CurrentTimeStamp()
+	}
+
+	return
+}
+
 func CalTermEndTimeStr(startTime, endTime time.Time, term, totalTerm, billType, paymentMonth int, isTermNormal bool) (startDateStr, endDateStr time.Time) {
 	s, e := CalTermEndTime(startTime.Unix(), endTime.Unix(), term, totalTerm, billType, paymentMonth, isTermNormal)
+	return time.Unix(s, 0), time.Unix(e, 0)
+}
+
+func CalcStartEndTimeOfIrrTermStr(startTime, endTime time.Time, term, totalTerm, billType, paymentMonth int, isTermNormal bool) (startDateStr, endDateStr time.Time) {
+	s, e := CalcStartEndTimeOfIrrTerm(startTime.Unix(), endTime.Unix(), term, totalTerm, billType, paymentMonth, isTermNormal)
 	return time.Unix(s, 0), time.Unix(e, 0)
 }
 
@@ -55,6 +96,18 @@ func TestCase(start, end string, term, totalTerm, billType, paymentMonth int, is
 	t1, _ := time.Parse("2006-01-02", start)
 	t2, _ := time.Parse("2006-01-02", end)
 	s, e := CalTermEndTimeStr(t1, t2, term, totalTerm, billType, paymentMonth, isTermNormal)
+	fmt.Println(start, end, "=>", term, s.Format("2006-01-02"), e.Format("2006-01-02"))
+}
+
+func CalTermEndTimeStr2(startTime, endTime time.Time, term, totalTerm, billType, paymentMonth int, isTermNormal bool) (startDateStr, endDateStr time.Time) {
+	s, e := CalcStartEndTimeOfIrrTerm(startTime.Unix(), endTime.Unix(), term, totalTerm, billType, paymentMonth, isTermNormal)
+	return time.Unix(s, 0), time.Unix(e, 0)
+}
+
+func TestCase2(start, end string, term, totalTerm, billType, paymentMonth int, isTermNormal bool) {
+	t1, _ := time.Parse("2006-01-02", start)
+	t2, _ := time.Parse("2006-01-02", end)
+	s, e := CalcStartEndTimeOfIrrTermStr(t1, t2, term, totalTerm, billType, paymentMonth, isTermNormal)
 	fmt.Println(start, end, "=>", term, s.Format("2006-01-02"), e.Format("2006-01-02"))
 }
 
@@ -649,4 +702,19 @@ func TestCalTermEndTimeStr() {
 	TestCase("2020-02-01", "2021-02-15", 3, 4, 2, 4, true)
 	TestCase("2020-02-01", "2021-02-15", 4, 4, 2, 4, false)
 	TestCase("2020-02-01", "2021-02-15", 4, 4, 3, 4, false)
+
+	fmt.Println("---------------------------------------------")
+	fmt.Println("---------------------------------------------")
+
+	TestCase2("2020-04-01", "2020-06-30", 1, 2, 1, 1, true)
+	TestCase2("2020-04-01", "2020-06-30", 2, 2, 2, 1, true)
+
+	TestCase2("2017-12-28", "2018-04-30", 1, 4, 1, 1, true)
+	TestCase2("2017-12-28", "2018-04-30", 2, 4, 2, 1, true)
+	TestCase2("2017-12-28", "2018-04-30", 3, 4, 2, 1, true)
+	TestCase2("2017-12-28", "2018-04-30", 4, 4, 2, 1, true)
+
+	TestCase("2018-01-30", "2018-04-29", 1, 3, 1, 1, true)
+	TestCase("2018-01-30", "2018-04-29", 2, 3, 2, 1, true)
+	TestCase("2018-01-30", "2018-04-29", 3, 3, 2, 1, false)
 }

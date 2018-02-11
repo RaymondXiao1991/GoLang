@@ -21,13 +21,13 @@ func IsNormal(data1, data2 int64) (is bool) {
 	return data1 == Min(data1, data2)
 }
 
-func TestCase2(data1, data2 int64) {
+func TestCase3(data1, data2 int64) {
 	is := IsNormal(data1, data2)
 	println(data1, data2, "=>", is)
 }
 
 func TestIsNormal() {
-	TestCase2(111, 222)
-	TestCase2(222, 111)
-	TestCase2(333, 333)
+	TestCase3(111, 222)
+	TestCase3(222, 111)
+	TestCase3(333, 333)
 }

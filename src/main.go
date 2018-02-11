@@ -93,4 +93,11 @@ func main() {
 
 	TestIsNormal()
 	fmt.Println("-------------------------------")
+
+	fmt.Println("H" + "i")
+	fmt.Println('H' + 'i')
+	fmt.Println("-------------------------------")
+
+	TestOrderRecord()
+	fmt.Println("-------------------------------")
 }
