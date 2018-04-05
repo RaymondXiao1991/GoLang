@@ -8,12 +8,16 @@ import (
 // AddMonthTime 获取几个月后的日期
 func AddMonthTime(t time.Time, month int) time.Time {
 	y1, m1, _ := t.Date()
-	if month > 1 {
-		t = t.AddDate(0, 1, 0)
-		if t == GetEndDateOfCurrentMonth2(t.Unix()) {
-			t = GetStartDateOfNextMonth(t.Unix())
+	if m1 == 2 {
+		if month > 1 {
+			t = t.AddDate(0, 1, 0)
+			if t == GetEndDateOfCurrentMonth2(t.Unix()) {
+				t = GetStartDateOfNextMonth(t.Unix())
+			}
+			t = t.AddDate(0, month-1, 0)
+		} else {
+			t = t.AddDate(0, month, 0)
 		}
-		t = t.AddDate(0, month-1, 0)
 	} else {
 		t = t.AddDate(0, month, 0)
 	}
@@ -82,6 +86,31 @@ func TestAddMonth() {
 	st = time.Date(2020, 2, 1, 0, 0, 0, 0, time.Local)
 	am = AddMonthTime(st, 1)
 	fmt.Println("One month after ", st, " is ", am)
+	fmt.Println("-------------------------------")
+
+	st = time.Date(2018, 3, 30, 0, 0, 0, 0, time.Local)
+	am = AddMonthTime(st, 1)
+	fmt.Println("One month after ", st, " is ", am)
+	fmt.Println("-------------------------------")
+
+	st = time.Date(2018, 3, 30, 0, 0, 0, 0, time.Local)
+	am = AddMonthTime(st, 2)
+	fmt.Println("Two month after ", st, " is ", am)
+	fmt.Println("-------------------------------")
+
+	st = time.Date(2018, 3, 31, 0, 0, 0, 0, time.Local)
+	am = AddMonthTime(st, 1)
+	fmt.Println("One month after ", st, " is ", am)
+	fmt.Println("-------------------------------")
+
+	st = time.Date(2018, 3, 31, 0, 0, 0, 0, time.Local)
+	am = AddMonthTime(st, 2)
+	fmt.Println("Two month after ", st, " is ", am)
+	fmt.Println("-------------------------------")
+
+	st = time.Date(2018, 3, 31, 0, 0, 0, 0, time.Local)
+	am = AddMonthTime(st, 3)
+	fmt.Println("Three month after ", st, " is ", am)
 	fmt.Println("-------------------------------")
 
 }

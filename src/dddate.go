@@ -59,6 +59,41 @@ func CalTime(start, end time.Time) (months, days int) {
 	return
 }
 
+/*
+// CalEndTime 计算账期结束日
+func CalEndTime(start, end time.Time) (months, days int) {
+	end.Year() = (months-int(end.Month()-start.Month()))/12 + start.Year()
+
+	daysIn := time.Date(end.Year(), end.Month()+1, 0, 0, 0, 0, 0, time.UTC).Day()
+	months = (end.Year()-start.Year())*12 + int(end.Month()-start.Month())
+
+	if start.Day() == 1 && end.Day() == daysIn {
+		months++
+		return
+	}
+
+	if end.Day()+1 >= start.Day() {
+		days = end.Day() - start.Day() + 1
+		return
+	}
+
+	if end.Day() == daysIn {
+		return
+	}
+
+	months--
+	//days = time.Date(end.Year(), end.Month(), 0, 0, 0, 0, 0, time.UTC).Day() - start.Day() + 1 + end.Day()
+	daysIn2 := time.Date(end.Year(), end.Month(), 0, 0, 0, 0, 0, time.UTC).Day()
+	if daysIn2 >= start.Day() {
+		days = daysIn2 - start.Day() + 1 + end.Day()
+	} else {
+		days = end.Day()
+	}
+
+	return
+}
+*/
+
 // 求两个时间之间的时间差几个月零几天
 func CalcTimeBetweenDates2(startDate int64, endDate int64) (months, days int) {
 	start := time.Unix(startDate, 0)
@@ -135,4 +170,7 @@ func TestDateUntil() {
 	testf("2017-02-02", "2018-02-05")
 
 	testf("2018-03-01", "2018-03-12")
+
+	testf("2018-03-30", "2018-05-29")
+	testf("2018-03-30", "2018-05-31")
 }
