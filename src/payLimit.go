@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 // TestPayLimit 支付限制
@@ -119,12 +120,21 @@ func SliceContains(src []string, value string) bool {
 
 // Format2String 格式化
 func Format2String(f float64) string {
+	/*
 	// 1.强转至int64,再转回float64,判断是否等于本身
-	// 2.转为string,再判断是否有"."
-	// 3.乘以一个大数,再求余数是否等于零
 	if float64(int64(f)) == f {
 		return strconv.FormatFloat(f, 'f', 2, 64)
 	}
 	return strconv.FormatFloat(f, 'f', -1, 64)
+	*/
 
+	// 2.转为string,再判断是否有"."
+	str := strconv.FormatFloat(f, 'f', -1, 64)
+	if !strings.Contains(str, ".") {
+		return strconv.FormatFloat(f, 'f', 2, 64)
+	}
+	return str
+
+	// 3.乘以一个大数,再求余数是否等于零
+	
 }
