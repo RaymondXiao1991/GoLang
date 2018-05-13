@@ -16,8 +16,7 @@ func CheckErr(err error) {
 // PanicAndRecover
 func PanicAndRecover() (billID int64, err error) {
 	fmt.Println("the program is begining...")
-	var _err error
-
+	
 	defer func() {
 		check := recover()
 		if check != nil {
@@ -27,11 +26,9 @@ func PanicAndRecover() (billID int64, err error) {
 		}
 	}()
 
-	_err = errors.New("paniccccccc")
-
 	f1()
 
-	CheckErr(_err)
+	CheckErr(err)
 
 	return billID, err
 }

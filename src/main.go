@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"time"
+	"fetch"
 )
 
 func main() {
@@ -277,4 +278,8 @@ func main() {
 
 	fmt.Println(Precision(3.445, 2, true))
 	fmt.Println(Precision(3.445, 2, false))
+
+	BigSlowOperation()
+
+	fetch.FF(3)
 }

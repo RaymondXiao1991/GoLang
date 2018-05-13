@@ -8,3 +8,12 @@ func (v IntVector) Sum() (s int) {
 	}
 	return
 }
+
+func Sum(vals...int) int {
+    total := 0
+    for _, val := range vals {
+        total += val
+    }
+    return total
+}
+
