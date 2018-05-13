@@ -33,4 +33,24 @@ func pre() {
 	amount := int(fa*1000) / 10
 	fmt.Println("amount:", amount)
 	fmt.Println("-------------------------------")
+
+	fmt.Println("-------------------------------")
+	var (
+		payableAmount float64
+		paidAmount    float64
+		payAmount     float64
+	)
+
+	payableAmount = 20280
+	paidAmount = 20279.99
+	payAmount = 0.01
+
+	fmt.Println("xxxxx:", (paidAmount*100000+payAmount*100000)/100000)
+	fmt.Println("payableAmount:", payableAmount)
+	fmt.Println("paidAmount:", paidAmount)
+	fmt.Println("payAmount:", payAmount)
+
+	recordServiceFee = Precision(9.10, 2, true)
+	fmt.Println(recordServiceFee)
+
 }

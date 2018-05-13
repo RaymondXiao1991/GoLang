@@ -231,6 +231,50 @@ func main() {
 	TestPayLimit3(2890.99, 1890.99)
 	TestPayLimit3(4000.54, 3000.454)
 	TestPayLimit3(4000.54, 3000.544)
+	TestPayLimit3(22102.50, 22102.50)
 	fmt.Println("-------------------------------")
 
+	TestCaseOfMakeUpDaysStr()
+	fmt.Println("-------------------------------")
+
+	fmt.Println("TestTestCalcStartEndTimeStr start-------------------------------")
+	TestTestCalcStartEndTimeStr()
+	fmt.Println("-------------------------------")
+
+	TestPayLimit3(22102.50, 22102.50)
+	fmt.Println("-------------------------------")
+
+	TestFor()
+	fmt.Println("-------------------------------")
+
+	TestSpilt("RB23423432432-HIS-1")
+	fmt.Println("-------------------------------")
+
+	//TestSpilt("RB23423432432")
+	fmt.Println("-------------------------------")
+
+	pre()
+	fmt.Println("-------------------------------")
+
+	TestInSlice(2)
+	fmt.Println("-------------------------------")
+
+	TestNotInSlice(2)
+	fmt.Println("-------------------------------")
+
+	AddMonthTime22(time.Now(), 1)
+
+	billID, err := PanicAndRecover()
+	fmt.Println(billID, err)
+	if err != nil {
+		fmt.Println("业务代码1出错...")
+	} else {
+		fmt.Println("开始执行业务代码2")
+	}
+
+	//billID, err := Normal()
+	//fmt.Println(billID, err)
+
+	fmt.Println(Precision(3.445, 2, true))
+	fmt.Println(Precision(3.445, 2, false))
 }

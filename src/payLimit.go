@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 // TestPayLimit 支付限制
@@ -97,7 +98,7 @@ func TestPayLimit3(shouldPay, payAmount float64) {
 	}
 	fmt.Println("canPaySlice:", canPaySlice)
 
-	if !SliceContains(canPaySlice, Format2String(payAmount)) { // 小数位为零时丢失有效位数
+	if !SliceContains(canPaySlice, Format2String2(payAmount)) { // 小数位为零时丢失有效位数
 		//if !SliceContains(canPaySlice, strconv.FormatFloat(payAmount, 'f', 2, 64)) { // 指定两位有效小数
 		fmt.Println("TEST CASE: shouldPay:", shouldPay, "payAmount:", payAmount, "支付金额错误,剩余可付金额:", shouldPay, ",请至少支付:", minCanPay, ",并每次加1000")
 	} else {
@@ -120,11 +121,35 @@ func SliceContains(src []string, value string) bool {
 // Format2String 格式化
 func Format2String(f float64) string {
 	// 1.强转至int64,再转回float64,判断是否等于本身
+	/*
+		if float64(int64(f)) == f {
+			return strconv.FormatFloat(f, 'f', 2, 64)
+		}
+	*/
+
 	// 2.转为string,再判断是否有"."
-	// 3.乘以一个大数,再求余数是否等于零
-	if float64(int64(f)) == f {
+	str := strconv.FormatFloat(f, 'f', -1, 64)
+
+	if len(strings.Split(str, ".")[1:]) < 2 {
 		return strconv.FormatFloat(f, 'f', 2, 64)
 	}
-	return strconv.FormatFloat(f, 'f', -1, 64)
 
+	return str
+
+	// 3.乘以一个大数,再求余数是否等于零
+}
+
+// Format2String2 格式化
+func Format2String2(f float64) string {
+	return fmt.Sprintf("%.2f", f)
+}
+
+// TestFor
+func TestFor() {
+	checkTerm := 0
+	hasTerms := 1
+	fmt.Println("[应出账期数:", checkTerm, "],", "[已出账期数:", hasTerms, "]")
+	for currentTerm := hasTerms + 1; currentTerm <= checkTerm; currentTerm++ {
+		fmt.Println("[开始生成第", currentTerm, "期账单]")
+	}
 }
