@@ -1,10 +1,14 @@
 package main
 
 import (
+	//"fetch"
 	"fmt"
+	"os"
+	"sync"
 	"time"
-	"fetch"
 )
+
+var wg sync.WaitGroup
 
 func main() {
 	// 测试时间差计算
@@ -281,5 +285,47 @@ func main() {
 
 	BigSlowOperation()
 
-	fetch.FF(3)
+	//fetch.FF(3)
+
+	wg.Add(1)
+	ff("direct")
+
+	wg.Add(1)
+	go ff("goroutine")
+
+	wg.Add(1)
+	go func(msg string) {
+		fmt.Println(msg)
+		wg.Done()
+	}("going")
+
+	wg.Wait()
+	fmt.Println("done")
+
+	var x, y IntSet
+	x.Add(1)
+	x.Add(144)
+	x.Add(9)
+	fmt.Println(x.String()) // "{1 9 144}"
+
+	y.Add(9)
+	y.Add(42)
+	fmt.Println(y.String()) // "{9 42}"
+
+	x.UnionWith(&y)
+	fmt.Println(x.String())           // "{1 9 42 144}"
+	fmt.Println(x.Has(9), x.Has(123)) // "true false"
+	fmt.Println(x.Len())
+	x.Remove(42)
+	fmt.Println(x.String()) // "{1 9 144}"
+
+	os.Stdout.Write([]byte("hello")) // OK: *os.File has Write method
+	os.Stdout.Close()                // OK: *os.File has Close method
+}
+
+func ff(from string) {
+	for i := 0; i < 3; i++ {
+		fmt.Println(from, ":", i)
+	}
+	wg.Done()
 }

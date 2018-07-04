@@ -95,6 +95,10 @@ func MakeUpCurrentMonth(startTime int64, addMonths, addDays, paymentMonth int) (
 		}
 	} else {
 		dayAfterMakeUp = time.Date(year, month, addDays, 0, 0, 0, 0, time.Local)
+		//fmt.Println(dayAfterMakeUp, startTime)
+		if addDays > 1 && dayAfterMakeUp.Before(time.Unix(startTime, 0)) {
+			dayAfterMakeUp = dayAfterMakeUp.AddDate(0, 1, 0)
+		}
 		months = addMonths + paymentMonth - 1
 	}
 	if addDays == 1 {
@@ -178,7 +182,7 @@ func RecursiveCalcPeriod(startTime int64, addMonths, addDays, paymentMonth, term
 	}
 
 	for i := 2; i <= term; i++ {
-		periodStart, periodEnd = CalcNextBaseOnPre(tmpStart, tmpEnd, paymentMonth*i)
+		periodStart, periodEnd = CalcNextBaseOnPre(tmpStart, tmpEnd, paymentMonth)
 		tmpStart = periodStart
 		tmpEnd = periodEnd
 	}
@@ -189,7 +193,6 @@ func RecursiveCalcPeriod(startTime int64, addMonths, addDays, paymentMonth, term
 // CalcNextBaseOnPre 根据上一个账期推算出下一个账期
 func CalcNextBaseOnPre(startTime, endTime int64, paymentMonth int) (periodStart, periodEnd int64) {
 	periodStart = GetLaterDateTime(time.Unix(endTime, 0), 1)
-	//periodEnd = AddMonth(periodStart, paymentMonth)
 	periodEnd = AddMonth(periodStart, paymentMonth)
 	return periodStart, periodEnd
 }
